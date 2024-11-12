@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const app = express()
 const productRouter = require("./src/routes/productRouter")
 const userRouter = require("./src/routes/userRouter")
+const cartRouter = require("./src/routes/cartRouter")
 const ProductModel = require("./src/models/productModel")
 var cors = require('cors')
 
@@ -32,6 +33,7 @@ app.use(cors(corsOptionsDelegate))
 app.use(express.json())
 app.use("/", productRouter)
 app.use("/user", userRouter)
+app.use("/cart", cartRouter)
 
 app.listen(3000, ()=>{
     console.log("Server running on port 3000")
