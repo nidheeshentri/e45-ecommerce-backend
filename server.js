@@ -6,6 +6,11 @@ const userRouter = require("./src/routes/userRouter")
 const cartRouter = require("./src/routes/cartRouter")
 const ProductModel = require("./src/models/productModel")
 var cors = require('cors')
+const dotenv = require('dotenv')
+
+dotenv.config({path: './.env'})
+
+const db_link = process.env.DB_LINK;
 
 var allowlist = ['http://localhost:5173', 'http://127.0.0.1:5173']
 var corsOptionsDelegate = function (req, callback) {
@@ -19,7 +24,7 @@ var corsOptionsDelegate = function (req, callback) {
 }
 
 async function main() {
-    await mongoose.connect('mongodb+srv://nidheeshb:cbNIJhHxg7xib6Jx@ecommerce.fbs8r.mongodb.net/?retryWrites=true&w=majority&appName=Ecommerce');
+    await mongoose.connect(db_link);
 }
 
 main()
