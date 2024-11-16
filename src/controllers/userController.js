@@ -55,4 +55,9 @@ const LoginController = (req, res) => {
     
 }
 
-module.exports = {CreateUserController, LoginController}
+const CheckAdmin = (req, res) => {
+    console.log("Admin")
+    res.send("Success")
+}
+
+module.exports = {CreateUserController, LoginController, CheckAdmin}

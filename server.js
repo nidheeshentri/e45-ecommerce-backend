@@ -11,6 +11,7 @@ const dotenv = require('dotenv')
 dotenv.config({path: './.env'})
 
 const db_link = process.env.DB_LINK;
+const port = process.env.PORT;
 
 var allowlist = ['http://localhost:5173', 'http://127.0.0.1:5173']
 var corsOptionsDelegate = function (req, callback) {
@@ -36,10 +37,11 @@ main()
 app.use(cors(corsOptionsDelegate))
 
 app.use(express.json())
+app.use(express.static('src/uploads'))
 app.use("/", productRouter)
 app.use("/user", userRouter)
 app.use("/cart", cartRouter)
 
-app.listen(3000, ()=>{
-    console.log("Server running on port 3000")
+app.listen(port, ()=>{
+    console.log("Server running on port "+port)
 })

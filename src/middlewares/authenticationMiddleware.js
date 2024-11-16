@@ -21,4 +21,28 @@ const authenticateUser = async (req, res, next) => {
     }
 }
 
-module.exports = authenticateUser
+const authenticateAdmin = async (req, res, next) => {
+    const token = req.header("Authorization")
+    if (token){
+        try{
+            var decoded = jwt.verify(token, secretKey);
+            if (decoded.email){
+                let user = await userModel.findOne({email: decoded.email})
+                if(user.isAdmin){
+                    next()
+                }
+                else{
+                    res.status(401).json({message: "Only admin can access"})
+                }
+            }else{
+                res.status(401).json({message: "Invalid token"})
+            }
+        }catch{
+            res.status(401).json({message: "Invalid token"})
+        }
+    }else{
+        res.status(401).json({message: "Unauthorized user"})
+    }
+}
+
+module.exports = {authenticateUser, authenticateAdmin}

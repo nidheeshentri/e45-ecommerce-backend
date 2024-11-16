@@ -1,6 +1,6 @@
 const express = require("express")
 const { getCartItems, AddToCart, updateCartItemCount } = require("../controllers/cartController")
-const authenticateUser = require("../middlewares/authenticationMiddleware")
+const {authenticateUser} = require("../middlewares/authenticationMiddleware")
 const router = express.Router()
 
 router.get("/", authenticateUser, getCartItems)

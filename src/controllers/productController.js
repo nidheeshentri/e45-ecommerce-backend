@@ -1,5 +1,6 @@
 const ProductModel = require("../models/productModel")
 
+
 const productList = (req, res)=> {
     ProductModel.find().exec()
     .then((products) => {
@@ -29,12 +30,21 @@ const productDetails = (req, res) => {
 }
 
 const createProduct = (req, res) => {
-    const newProduct = new ProductModel(req.body)
+    console.log(req.file.filename)
+    console.log(req.body)
+    let data = {
+        image: "product_images/"+req.file.filename,
+        title: req.body.title,
+        price: req.body.price,
+        discount: req.body.discount,
+    }
+    const newProduct = new ProductModel(data)
     newProduct.save()
     .then((product) => {
         console.log(product)
-        res.send("Product created successfully")
+        res.json({message: "Product created successfully"})
     })
+    
 }
 
 module.exports = {productList, productDetails, createProduct}
