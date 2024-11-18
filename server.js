@@ -7,22 +7,12 @@ const cartRouter = require("./src/routes/cartRouter")
 const ProductModel = require("./src/models/productModel")
 var cors = require('cors')
 const dotenv = require('dotenv')
+var cookieParser = require('cookie-parser')
 
 dotenv.config({path: './.env'})
 
 const db_link = process.env.DB_LINK;
 const port = process.env.PORT;
-
-var allowlist = ['http://localhost:5173', 'http://127.0.0.1:5173']
-var corsOptionsDelegate = function (req, callback) {
-  var corsOptions;
-  if (allowlist.indexOf(req.header('Origin')) !== -1) {
-    corsOptions = { origin: true } // reflect (enable) the requested origin in the CORS response
-  } else {
-    corsOptions = { origin: false } // disable CORS for this request
-  }
-  callback(null, corsOptions) // callback expects two parameters: error and options
-}
 
 async function main() {
     await mongoose.connect(db_link);
@@ -34,7 +24,11 @@ main()
 })
 .catch(err => console.log(err));
 
-app.use(cors(corsOptionsDelegate))
+app.use(cookieParser())
+app.use(cors({
+  origin: "http://localhost:3000",
+  credentials: true,
+}))
 
 app.use(express.json())
 app.use(express.static('src/uploads'))

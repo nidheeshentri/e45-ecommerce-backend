@@ -38,8 +38,9 @@ const LoginController = (req, res) => {
         if (user){
             bcrypt.compare(password, user.password, function(err, result) {
                 if (result){
-                    var token = jwt.sign({email: email}, secretKey);
-                    res.status(200).json({token: token})
+                    var access_token = jwt.sign({email: email}, secretKey, {expiresIn: '15m'});
+                    var refresh_token = jwt.sign({email: email}, secretKey, {expiresIn: "30d"});
+                    res.status(200).json({token: access_token, refresh: refresh_token})
                 }else{
                     res.status(400).json({message: "Invalid credentials"})
                 }
@@ -51,8 +52,13 @@ const LoginController = (req, res) => {
     }).catch(err => {
         res.status(400).json({message: "Invalid credentials"})
     })
-    var token = jwt.sign({ email: email }, secretKey);
     
+}
+
+const GetTokenFromRefreshToken = (req, res) => {
+    const email = req.user.email
+    var access_token = jwt.sign({email: email}, secretKey, {expiresIn: '15m'});
+    res.json({"token": access_token})
 }
 
 const CheckAdmin = (req, res) => {
@@ -60,4 +66,4 @@ const CheckAdmin = (req, res) => {
     res.send("Success")
 }
 
-module.exports = {CreateUserController, LoginController, CheckAdmin}
+module.exports = {CreateUserController, LoginController, CheckAdmin, GetTokenFromRefreshToken}

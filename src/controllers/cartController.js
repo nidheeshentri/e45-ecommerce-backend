@@ -2,6 +2,7 @@ const CartModel = require("../models/cartModel")
 
 const getCartItems = async (req, res) => {
     let user = req.user
+    console.log('Cookies: ', req.cookies)
     let cartItems = await CartModel.find({user: user._id}).populate('product')
     console.log(cartItems)
     res.status(200).json({cartItems: cartItems})
